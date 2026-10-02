@@ -8,7 +8,7 @@
  *  - Övriga filer på samma origin: stale-while-revalidate.
  *  - Andra origins (t.ex. Supabase realtid) rörs aldrig.
  */
-const VERSION = 'v15'; // v15: Hitta (mat/afterski/shops). v14: lösenordsspärr (webb). v13: PistPejl-logga, ikoner och manifest (v12: appen flyttad till /app). Höj vid varje deploy
+const VERSION = 'v16'; // v16: engelska (i18n). v15: Hitta (mat/afterski/shops). v14: lösenordsspärr (webb). v13: PistPejl-logga, ikoner och manifest (v12: appen flyttad till /app). Höj vid varje deploy
 const PAGES = `pistpejl-pages-${VERSION}`;
 const ASSETS = `pistpejl-assets-${VERSION}`;
 const BASE = new URL(self.registration.scope).pathname; // "/app/"
