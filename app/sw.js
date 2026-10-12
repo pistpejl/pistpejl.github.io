@@ -8,7 +8,7 @@
  *  - Övriga filer på samma origin: stale-while-revalidate.
  *  - Andra origins (t.ex. Supabase realtid) rörs aldrig.
  */
-const VERSION = 'v21'; // v21: Pejlas röst (sv, delvis). v20: barnturen visas i barnläget. v19: inspelning går att stoppa (röstkod + röstmeddelanden). v18: Pejla i Pixar-stil (demoturen). v17: demotur med Pejla. v16: engelska (i18n). v15: Hitta (mat/afterski/shops). v14: lösenordsspärr (webb). v13: PistPejl-logga, ikoner och manifest (v12: appen flyttad till /app). Höj vid varje deploy
+const VERSION = 'v22'; // v22: Pejlas röst spelas (SW släpper igenom Range/ljud; autoplay-upplåsning). v20: barnturen visas i barnläget. v19: inspelning går att stoppa (röstkod + röstmeddelanden). v18: Pejla i Pixar-stil (demoturen). v17: demotur med Pejla. v16: engelska (i18n). v15: Hitta (mat/afterski/shops). v14: lösenordsspärr (webb). v13: PistPejl-logga, ikoner och manifest (v12: appen flyttad till /app). Höj vid varje deploy
 const PAGES = `pistpejl-pages-${VERSION}`;
 const ASSETS = `pistpejl-assets-${VERSION}`;
 const BASE = new URL(self.registration.scope).pathname; // "/app/"
@@ -181,6 +181,8 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
   if (url.pathname === BASE + 'sw.js') return;
+  // Ljud/video: Range-förfrågningar (206) går inte att cacha – låt webbläsaren hämta direkt
+  if (req.headers.has('range') || req.destination === 'audio' || req.destination === 'video' || /\.(mp3|m4a|wav|ogg)$/i.test(url.pathname)) return;
   if (req.mode === 'navigate') {
     event.respondWith(handleNavigate(req, url));
     return;
