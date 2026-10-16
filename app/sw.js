@@ -8,7 +8,7 @@
  *  - Övriga filer på samma origin: stale-while-revalidate.
  *  - Andra origins (t.ex. Supabase realtid) rörs aldrig.
  */
-const VERSION = 'v24'; // v24: Pejla sv komplett (c-exit) + 7 engelska klipp. v23: fler Pejla-klipp (n-react/find/sos/status). v22: Pejlas röst spelas (SW släpper igenom Range/ljud; autoplay-upplåsning). v20: barnturen visas i barnläget. v19: inspelning går att stoppa (röstkod + röstmeddelanden). v18: Pejla i Pixar-stil (demoturen). v17: demotur med Pejla. v16: engelska (i18n). v15: Hitta (mat/afterski/shops). v14: lösenordsspärr (webb). v13: PistPejl-logga, ikoner och manifest (v12: appen flyttad till /app). Höj vid varje deploy
+const VERSION = 'v25'; // v25: Pejla +8 engelska (sos/status/vader/dag/installningar + barn hello/family/sos). v24: Pejla sv komplett (c-exit) + 7 engelska klipp. v23: fler Pejla-klipp (n-react/find/sos/status). v22: Pejlas rost spelas (SW slapper igenom Range/ljud; autoplay-upplasning). v20: barnturen visas i barnlaget. Hog vid varje deploy
 const PAGES = `pistpejl-pages-${VERSION}`;
 const ASSETS = `pistpejl-assets-${VERSION}`;
 const BASE = new URL(self.registration.scope).pathname; // "/app/"
