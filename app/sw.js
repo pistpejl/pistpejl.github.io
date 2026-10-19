@@ -8,7 +8,7 @@
  *  - Övriga filer på samma origin: stale-while-revalidate.
  *  - Andra origins (t.ex. Supabase realtid) rörs aldrig.
  */
-const VERSION = 'v27'; // v27: kartlager (Pistkarta/Karta/Satellit/Egen pistkarta, Leaflet), poly2-georeferens. v26: Pejla engelska komplett (c-phrase/c-what/c-exit). v25: Pejla +8 engelska (sos/status/vader/dag/installningar + barn hello/family/sos). v24: Pejla sv komplett (c-exit) + 7 engelska klipp. v23: fler Pejla-klipp (n-react/find/sos/status). v22: Pejlas rost spelas (SW slapper igenom Range/ljud; autoplay-upplasning). v20: barnturen visas i barnlaget. Hog vid varje deploy
+const VERSION = 'v28'; // v28: Egen pistkarta = målad georefererad bild (CRS.Simple). v27: kartlager (Pistkarta/Karta/Satellit/Egen pistkarta, Leaflet), poly2-georeferens. v26: Pejla engelska komplett (c-phrase/c-what/c-exit). v25: Pejla +8 engelska (sos/status/vader/dag/installningar + barn hello/family/sos). v24: Pejla sv komplett (c-exit) + 7 engelska klipp. v23: fler Pejla-klipp (n-react/find/sos/status). v22: Pejlas rost spelas (SW slapper igenom Range/ljud; autoplay-upplasning). v20: barnturen visas i barnlaget. Hog vid varje deploy
 const PAGES = `pistpejl-pages-${VERSION}`;
 const ASSETS = `pistpejl-assets-${VERSION}`;
 const BASE = new URL(self.registration.scope).pathname; // "/app/"
