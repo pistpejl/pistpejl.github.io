@@ -1521,9 +1521,14 @@ function LLs(c){return G?c.map(function(q){return LL(q[0],q[1]);}):c;}
 function unLL(ll){if(!G)return {lat:ll.lat,lng:ll.lng};var x=ll.lng,y=-ll.lat;
   var j=clampv((x-G.ix0)/G.idx,0,G.nix-1),i=clampv((y-G.iy0)/G.idy,0,G.niy-1);
   var la=bil(G.ilat,i,j),lo=bil(G.ilon,i,j);return la==null||lo==null?null:{lat:la,lng:lo};}
+var userMoved=false;
 var IB=G?[[-G.H,0],[0,G.W]]:null;
-var map=G?L.map('map',{crs:L.CRS.Simple,zoomControl:false,attributionControl:false,minZoom:-2,maxZoom:3,zoomSnap:0.25,zoomDelta:0.5,wheelPxPerZoomLevel:90,bounceAtZoomLimits:false,maxBounds:L.latLngBounds(IB).pad(0.3),maxBoundsViscosity:0.8}):L.map('map',{zoomControl:false,attributionControl:false,preferCanvas:true,minZoom:9,maxZoom:19,zoomSnap:0.5,zoomDelta:1,wheelPxPerZoomLevel:90,bounceAtZoomLimits:false}).setView([63.4115,13.065],13);
-if(G){L.imageOverlay(IMG.url,IB,{interactive:false}).addTo(map);map.fitBounds(IB,{animate:false});}
+var map=G?L.map('map',{crs:L.CRS.Simple,zoomControl:false,attributionControl:false,minZoom:-5,maxZoom:3,zoomSnap:0.1,zoomDelta:0.5,wheelPxPerZoomLevel:90,bounceAtZoomLimits:false,maxBounds:L.latLngBounds(IB).pad(0.15),maxBoundsViscosity:0.5}):L.map('map',{zoomControl:false,attributionControl:false,preferCanvas:true,minZoom:9,maxZoom:19,zoomSnap:0.5,zoomDelta:1,wheelPxPerZoomLevel:90,bounceAtZoomLimits:false}).setView([63.4115,13.065],13);
+if(G){L.imageOverlay(IMG.url,IB,{interactive:false}).addTo(map);map.fitBounds(IB,{animate:false});
+  /* WebView/iframe kan ha storlek 0 vid start → passa om när layouten är klar */
+  map.on('dragstart',function(){userMoved=true;});map.getContainer().addEventListener('wheel',function(){userMoved=true;},{passive:true});map.getContainer().addEventListener('touchstart',function(e){if(e.touches.length>1)userMoved=true;},{passive:true});
+  function refit(){map.invalidateSize(false);if(!userMoved)map.fitBounds(IB,{animate:false});}
+  window.addEventListener('resize',refit);setTimeout(refit,50);setTimeout(refit,400);}
 function home(){if(G)map.fitBounds(IB,{animate:false});else map.setView([63.4115,13.065],13);}
 var attr=L.control.attribution({prefix:false,position:'bottomright'}).addTo(map);
 var state=null,curType=null,tileLayer=null,hsLayer=null,attrTxt=[];
@@ -1639,7 +1644,7 @@ function apply(s){
   setType(s.type);
   syncPins(s.pins);syncPois(s.pois);syncMeeting(s.meeting);syncRoutes(s.routes,s.tracks);
   document.getElementById('map').style.cursor=s.placing?'crosshair':'';
-  if(first){first=false;fitPins();}
+  if(first){first=false;if(!G)fitPins();}
 }
 function centerOn(lat,lng,z){
   var zz=G?Math.max(map.getZoom(),0.5):(z||Math.max(map.getZoom(),16));var i=(state&&state.insets)||{top:0,bottom:0};var d=(i.top-i.bottom)/2;
@@ -1649,7 +1654,7 @@ function recv(m){
   if(!m)return;
   if(m.k==='state')apply(m.s);
   else if(m.k==='center')centerOn(m.lat,m.lng,m.z);
-  else if(m.k==='zoom')map.setZoom(map.getZoom()+m.d);
+  else if(m.k==='zoom'){userMoved=true;}if(m.k==='zoom')map.setZoom(map.getZoom()+m.d);
   else if(m.k==='fit'&&state){home();}
 }
 window.__pj=function(s){try{recv(typeof s==='string'?JSON.parse(s):s);}catch(e){}};
